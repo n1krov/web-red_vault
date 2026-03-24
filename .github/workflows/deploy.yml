@@ -29,18 +29,21 @@ jobs:
         with:
           fetch-depth: 0 # Necesario para las fechas de última modificación de git
           
-      - name: 2. Eliminar carpeta content por defecto de Quartz (evitar conflictos)
-        run: rm -rf content/* || true
-        
-      - name: 3. Checkout de las notas (Red Vault)
+      - name: 2. Checkout de las notas (Red Vault) a carpeta temporal
         uses: actions/checkout@v4
         with:
-          # el repo red_vault
           repository: n1krov/red_vault 
-          path: content
+          path: tmp_obsidian
           fetch-depth: 0
-          # token para acceder al repo privado
           token: ${{ secrets.PAT_TOKEN }}
+          
+      - name: 3. Mover notas a content pero preservar index.md
+        run: |
+          # No eliminamos content/index.md, copiamos el resto de las notas
+          # Esto evita que se sobrescriba el index.md de la web
+          cp -r tmp_obsidian/* content/ || true
+          cp -r tmp_obsidian/.[!.]* content/ || true
+          rm -rf tmp_obsidian
           
       - name: 4. Configurar Node.js v22 y Formatear notas
         uses: actions/setup-node@v4
