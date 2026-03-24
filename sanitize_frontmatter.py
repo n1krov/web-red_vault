@@ -1,4 +1,5 @@
 import os
+import yaml
 
 def sanitize_file(filepath):
     try:
@@ -28,16 +29,16 @@ def sanitize_file(filepath):
             content = '\n'.join(lines)
             modified = True
         else:
-            # Caso 2: El bloque no tiene formato YAML válido (ej. sin ':' para clave-valor)
-            frontmatter_lines = lines[1:end_idx]
-            is_valid_yaml = False
-            for line in frontmatter_lines:
-                if ':' in line:
-                    is_valid_yaml = True
-                    break
-            
-            # Si tiene contenido pero no es YAML válido, eliminamos el primer '---'
-            if not is_valid_yaml and len(frontmatter_lines) > 0:
+            # Caso 2: El bloque no es YAML válido según un parser real
+            frontmatter_block = '\n'.join(lines[1:end_idx])
+            try:
+                parsed = yaml.safe_load(frontmatter_block)
+                # Si no es un diccionario (ej. un string vacío o texto sin keys), lo marcamos inválido
+                if not isinstance(parsed, dict):
+                    raise ValueError("Not a dictionary")
+            except Exception:
+                # El YAML es inválido (tiene sintaxis Markdown que lo rompe, o no es un diccionario)
+                # Eliminamos el primer '---'
                 lines.pop(0)
                 content = '\n'.join(lines)
                 modified = True

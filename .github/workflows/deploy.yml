@@ -48,7 +48,7 @@ jobs:
           node-version: 22
           
       - name: 4.5. Sanitizar notas de Obsidian mal formateadas
-        run: python3 sanitize_frontmatter.py
+        run: pip install pyyaml && python3 sanitize_frontmatter.py
         
       - name: 5. Instalar dependencias
         run: npm ci
