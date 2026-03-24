@@ -1,0 +1,35 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Node modules
+node_modules/
+
+# Mac / Windows OS
+.DS_Store
+Thumbs.db
+
+# Quartz Specific
+public/
+.quartz-cache/
+
+# Si clonaremos el contenido desde el repo "red vault" dinámicamente, ignoramos temporalmente lo que haya en content/
+# (Salvo el index.md inicial si es necesario, pero evitamos ensuciar el repo con TODAS las notas)
+# content/*
+# !content/index.md
+
+# Obsidian
+.obsidian/
+
+# TypeScript
+tsconfig.tsbuildinfo
+
+# Replit & Others
+.replit
+replit.nix
+private/
+prof
