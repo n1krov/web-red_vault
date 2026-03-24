@@ -24,7 +24,8 @@ def sanitize_file(filepath):
         
         # Caso 1: Frontmatter sin cerrar
         if end_idx == -1:
-            content = '\n' + content
+            lines.pop(0)
+            content = '\n'.join(lines)
             modified = True
         else:
             # Caso 2: El bloque no tiene formato YAML válido (ej. sin ':' para clave-valor)
@@ -35,9 +36,10 @@ def sanitize_file(filepath):
                     is_valid_yaml = True
                     break
             
-            # Si tiene contenido pero no es YAML válido, forzamos que se trate como texto normal
+            # Si tiene contenido pero no es YAML válido, eliminamos el primer '---'
             if not is_valid_yaml and len(frontmatter_lines) > 0:
-                content = '\n' + content
+                lines.pop(0)
+                content = '\n'.join(lines)
                 modified = True
 
         if modified:
