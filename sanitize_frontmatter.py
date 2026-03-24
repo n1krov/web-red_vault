@@ -3,50 +3,58 @@ import yaml
 
 def sanitize_file(filepath):
     try:
-        with open(filepath, 'r', encoding='utf-8') as f:
+        # utf-8-sig remueve la firma BOM invisible de Windows/Obsidian
+        with open(filepath, 'r', encoding='utf-8-sig') as f:
             content = f.read()
 
-        # Si el archivo no comienza con '---', no hay frontmatter problemático
-        if not content.startswith('---'):
+        # Quartz's gray-matter ignora espacios y saltos de linea vacios al inicio
+        stripped_content = content.lstrip()
+        if not stripped_content.startswith('---'):
             return
 
         lines = content.splitlines()
-        if len(lines) < 2:
+        
+        # Encontrar exactamente la linea del primer '---'
+        start_idx = -1
+        for i, line in enumerate(lines):
+            if line.strip() == '---':
+                start_idx = i
+                break
+                
+        if start_idx == -1:
             return
 
         end_idx = -1
-        # Buscar el cierre del frontmatter (el siguiente '---')
-        for i in range(1, len(lines)):
+        for i in range(start_idx + 1, len(lines)):
             if lines[i].strip() == '---':
                 end_idx = i
                 break
 
         modified = False
-        
-        # Caso 1: Frontmatter sin cerrar
+
         if end_idx == -1:
-            lines.pop(0)
+            # Sin cerrar
+            lines.pop(start_idx)
             content = '\n'.join(lines)
             modified = True
         else:
-            # Caso 2: El bloque no es YAML válido según un parser real
-            frontmatter_block = '\n'.join(lines[1:end_idx])
+            frontmatter_block = '\n'.join(lines[start_idx + 1 : end_idx])
             try:
                 parsed = yaml.safe_load(frontmatter_block)
-                # Si no es un diccionario (ej. un string vacío o texto sin keys), lo marcamos inválido
-                if not isinstance(parsed, dict):
+                # Parse puede devolver None si esta vacio. Si no es dict ni None, es invalido.
+                if parsed is not None and not isinstance(parsed, dict):
                     raise ValueError("Not a dictionary")
             except Exception:
-                # El YAML es inválido (tiene sintaxis Markdown que lo rompe, o no es un diccionario)
-                # Eliminamos el primer '---'
-                lines.pop(0)
+                # Falla el parseo estricto
+                lines.pop(start_idx)
                 content = '\n'.join(lines)
                 modified = True
 
         if modified:
+            # Escribir con utf-8 normal sin BOM
             with open(filepath, 'w', encoding='utf-8') as f:
                 f.write(content)
-            print(f"[Sanitizado] {filepath}")
+            print(f"[Sanitizado correctamente] {filepath}")
 
     except Exception as e:
         print(f"Error procesando {filepath}: {e}")
@@ -54,7 +62,7 @@ def sanitize_file(filepath):
 def main():
     content_dir = os.path.join(os.getcwd(), 'content')
     if not os.path.exists(content_dir):
-        print("El directorio 'content' no existe. Saltando sanitización.")
+        print("El directorio 'content' no existe.")
         return
         
     for root, dirs, files in os.walk(content_dir):
