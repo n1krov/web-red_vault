@@ -1,3 +1,29 @@
 @use "./base.scss";
 
 // put your custom CSS here!
+
+/* Estilo hacker/terminal para el código en línea (ej. comandos pequeños) */
+p > code, li > code, td > code {
+  color: #00ff00 !important;
+  background-color: rgba(0, 255, 0, 0.1) !important;
+  border: 1px solid rgba(0, 255, 0, 0.3);
+  padding: 0.1em 0.3em;
+  border-radius: 4px;
+  font-family: var(--codeFont);
+}
+
+/* Forzar un contraste perfecto para los bloques de código grandes */
+pre {
+  background-color: #050505 !important;
+  border: 1px solid rgba(0, 255, 0, 0.5);
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.05);
+}
+
+/* Asegurar que las barras de desplazamiento (scroll) en los bloques de código combinen */
+pre::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 255, 0, 0.3);
+}
+
+pre::-webkit-scrollbar-track {
+  background: #050505;
+}
