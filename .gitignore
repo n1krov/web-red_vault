@@ -33,3 +33,5 @@ tsconfig.tsbuildinfo
 replit.nix
 private/
 prof
+
+__pycache__/

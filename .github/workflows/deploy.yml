@@ -42,7 +42,7 @@ jobs:
           # token para acceder al repo privado
           token: ${{ secrets.PAT_TOKEN }}
           
-      - name: 4. Configurar Node.js v22 y Python
+      - name: 4. Configurar Node.js v22 y Formatear notas
         uses: actions/setup-node@v4
         with:
           node-version: 22
