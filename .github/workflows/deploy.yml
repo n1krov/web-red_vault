@@ -1,0 +1,70 @@
+name: Despliegue de Red Vault
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  repository_dispatch:
+    # Este evento "update-notes" puede ser llamado desde el repositorio 'red vault'
+    # mediante un GitHub Action allí que haga un webhook post, o manualmente mediante API
+    types: [update-notes]
+  workflow_dispatch: # Permite ejecución manual desde la pestaña Actions
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: 1. Checkout del código web (Quartz)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Necesario para las fechas de última modificación de git
+          
+      - name: 2. Eliminar carpeta content por defecto de Quartz (evitar conflictos)
+        run: rm -rf content/* || true
+        
+      - name: 3. Checkout de las notas (Red Vault)
+        uses: actions/checkout@v4
+        with:
+          # el repo red_vault
+          repository: n1krov/red_vault 
+          path: content
+          fetch-depth: 0
+          # token para acceder al repo privado
+          token: ${{ secrets.PAT_TOKEN }}
+          
+      - name: 4. Configurar Node.js v22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          
+      - name: 5. Instalar dependencias
+        run: npm ci
+        
+      - name: 6. Construir Quartz
+        run: npx quartz build
+        
+      - name: 7. Subir el sitio generado como artefacto
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 8. Desplegar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
