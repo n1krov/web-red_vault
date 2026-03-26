@@ -25,6 +25,8 @@ public/
 # Obsidian
 .obsidian/
 
+content/test.md
+
 # TypeScript
 tsconfig.tsbuildinfo
 

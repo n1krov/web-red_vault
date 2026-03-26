@@ -32,7 +32,7 @@ const config: QuartzConfig = {
           light: "#0d1117",
           lightgray: "#21262d",
           gray: "#8b949e",
-          darkgray: "#c9d1d9",
+          darkgray: "#e2e8f0",
           dark: "#00ff00",
           secondary: "#00ff00",
           tertiary: "#3fb950",
@@ -43,7 +43,7 @@ const config: QuartzConfig = {
           light: "#0d1117",
           lightgray: "#21262d",
           gray: "#8b949e",
-          darkgray: "#c9d1d9",
+          darkgray: "#e2e8f0",
           dark: "#00ff00",
           secondary: "#00ff00",
           tertiary: "#3fb950",
@@ -61,8 +61,8 @@ const config: QuartzConfig = {
       }),
       Plugin.SyntaxHighlighting({
         theme: {
-          light: "github-dark",
-          dark: "github-dark",
+          light: "dracula",
+          dark: "dracula",
         },
         keepBackground: false,
       }),

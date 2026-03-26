@@ -3,7 +3,9 @@
 // put your custom CSS here!
 
 /* Estilo hacker/terminal para el código en línea (ej. comandos pequeños) */
-p > code, li > code, td > code {
+p>code,
+li>code,
+td>code {
   color: #00ff00 !important;
   background-color: rgba(0, 255, 0, 0.1) !important;
   border: 1px solid rgba(0, 255, 0, 0.3);
@@ -14,7 +16,7 @@ p > code, li > code, td > code {
 
 /* Forzar un contraste perfecto para los bloques de código grandes */
 pre {
-  background-color: #050505 !important;
+  background-color: #161b22 !important;
   border: 1px solid rgba(0, 255, 0, 0.5);
   box-shadow: 0 0 10px rgba(0, 255, 0, 0.05);
 }
@@ -24,6 +26,50 @@ pre::-webkit-scrollbar-thumb {
   background-color: rgba(0, 255, 0, 0.3);
 }
 
+/* Animacion del cursor de terminal global */
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Scrollbar global estilo hacker */
+html {
+  scrollbar-color: #00ff00 #0d1117;
+  scrollbar-width: thin;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #0d1117;
+}
+
+*::-webkit-scrollbar-thumb {
+  /* este es para el scroll normal */
+  background: #00ff00;
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:active {
+  background: rgba(0, 255, 0, 0.3);
+  /* este tendria que ser elverde main*/
+}
+
+/* Scroll track específico para los bloques de código (para que coincida con su gris oscuro) */
 pre::-webkit-scrollbar-track {
-  background: #050505;
+  background: #161b22;
+  border-bottom-right-radius: 4px;
 }
