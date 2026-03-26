@@ -43,7 +43,7 @@ pre::-webkit-scrollbar-thumb {
 
 /* Scrollbar global estilo hacker */
 html {
-  scrollbar-color: rgba(0, 255, 0, 0.3) #0d1117;
+  scrollbar-color: #00ff00 #0d1117;
   scrollbar-width: thin;
 }
 
@@ -54,17 +54,18 @@ html {
 
 *::-webkit-scrollbar-track {
   background: #0d1117;
-  /* Fondo igual al de la página */
 }
 
 *::-webkit-scrollbar-thumb {
-  background: rgba(0, 255, 0, 0.3);
-  /* Verde translúcido para el scroll */
+  /* este es para el scroll normal */
+  background: #00ff00;
   border-radius: 4px;
 }
 
-*::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 255, 0, 0.6);
+*::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:active {
+  background: rgba(0, 255, 0, 0.3);
+  /* este tendria que ser elverde main*/
 }
 
 /* Scroll track específico para los bloques de código (para que coincida con su gris oscuro) */
