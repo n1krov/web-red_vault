@@ -25,12 +25,12 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: 1. Checkout del código web (Quartz)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0 # Necesario para las fechas de última modificación de git
           
       - name: 2. Checkout de las notas (Red Vault) a carpeta temporal
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: n1krov/red_vault 
           path: tmp_obsidian
@@ -46,7 +46,7 @@ jobs:
           rm -rf tmp_obsidian
           
       - name: 4. Configurar Node.js v22 y Formatear notas
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 22
           
@@ -60,7 +60,7 @@ jobs:
         run: npx quartz build
         
       - name: 7. Subir el sitio generado como artefacto
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: public
 
@@ -73,4 +73,4 @@ jobs:
     steps:
       - name: 8. Desplegar en GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
